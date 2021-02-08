@@ -1,15 +1,15 @@
 <?php
 
-function imgNodeRemove($xmlFile)
+function imgNodeRemove($xml)
 {
-	$xmlDoc = new SimpleXMLElement($xmlFile, 0, true);
-	$nodesToDelete = array();
+	$xmlDoc = isXMLFileorString($xml);
 
+	$nodesToDelete = array();
 	/**
 	 * First, I do a search for those nodes
 	 * that contain an image node.
 	 */
-	foreach ($xmlDoc as $profile){
+	foreach ($xmlDoc as $profile) {
 
 		if (isset($profile->img)) {
 			$nodesToDelete[] = $profile; // add the parent node that contains image node
@@ -29,9 +29,38 @@ function imgNodeRemove($xmlFile)
 		$xmlDOM->parentNode->removeChild($xmlDOM);
 	}
 	// overwriting the file without the image nodes
-	return $xmlDoc->saveXML($xmlFile);
-
+	saveXMLFileorString($xmlDoc, $xml);
 }
 
 
 imgNodeRemove('profile.xml');
+// imgNodeRemove('<xml>
+// <profile>
+// 	<img src="profile"/>
+// </profile>
+// <profile>
+// 	<tag> foo </tag>
+// </profile>
+// </xml>');
+
+function isXMLFileorString($inputXML)
+{
+	if ($inputXML === '') {
+		var_dump("Not Found XML");
+	} elseif (file_exists($inputXML)) {
+		$xmlDoc = new SimpleXMLElement($inputXML, 0, true);
+	}
+	else {
+		$xmlDoc = new SimpleXMLElement($inputXML, 0, false);
+	}
+	return $xmlDoc;
+}
+
+function saveXMLFileorString($xmlDoc, $xml)
+{
+	if (file_exists($xml)) {
+		return $xmlDoc->saveXML($xml);
+	}
+	// var_dump($xmlDoc->asXML());
+	return $xmlDoc->asXML();
+}
