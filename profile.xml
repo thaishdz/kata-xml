@@ -1,8 +1,8 @@
+<?xml version="1.0"?>
 <xml>
-  <profile>
-    <img src="profile"/>
-  </profile>
+  
   <profile>
     <tag> foo </tag>
   </profile>
+  
 </xml>
